@@ -1,0 +1,29 @@
+List of data useful of each player to make analysis of
+----------------------------------------------------
+
+# How to get the list of GM - urllib.request.urlopen('https://api.chess.com/pub/titled/GM')
+
+1. Name 
+2. Rating (chess_blitz)
+3. Country 
+4. 
+
+How to arrive to that data:
+
+1.  raw_data = urllib.request.urlopen('https://api.chess.com/pub/titled/GM')
+    data_bytes = raw_data.read()
+    data_str = data_bytes.decode("utf-8")
+    json_GM = json.loads(data_str)
+    list_GM_names = json_GM['players']    #List of GM, specific name just point it in the list
+
+2.  raw_data = urllib.request.urlopen('https://api.chess.com/pub/player/'+ list_GM_names[i]+'/stats')
+    data_bytes = raw_data.read()
+    data_str = data_bytes.decode("utf-8")
+    stats_player = json.loads(data_str)
+    rating_chess_blitz = stats_player["chess_blitz"]["last"]["rating"]
+
+3.  raw_data = urllib.request.urlopen('https://api.chess.com/pub/player/'+ list_GM_names[i])
+    data_bytes = raw_data.read()
+    data_str = data_bytes.decode("utf-8")
+    player_info = json.loads(data_str)
+    
