@@ -1,47 +1,3 @@
-# import urllib.request
-# import json
-# from collections import Counter
-
-
-# name = 'Busi_jr'
-# # raw_data = urllib.request.urlopen('https://api.chess.com/pub/player/'+ name)
-# raw_data = urllib.request.urlopen('https://api.chess.com/pub/titled/GM')
-
-# data_bytes = raw_data.read()
-# data_str = data_bytes.decode("utf-8")
-# data_dict = json.loads(data_str)
-
-# list_GM_names = data_dict['players']
-
-# # print(list_GM_names) 
-
-# list_all_GM_countries_url = []
-
-# for name in list_GM_names:
-#     raw_data = urllib.request.urlopen('https://api.chess.com/pub/player/'+ name)
-#     data_bytes = raw_data.read()
-#     data_str = data_bytes.decode("utf-8")
-#     data_dict = json.loads(data_str)
-#     country_URL = data_dict['country']
-#     list_all_GM_countries_url.append(country_URL)
-
-# counter_all_GM_countries_url = Counter(list_all_GM_countries_url)
-# print(counter_all_GM_countries_url)
-
-# #Transform the counter dict to a casual dict with the names of each counter (not url) and the amount of times that they appear
-
-# counter_all_GM_countries_name = {}
-# for url in counter_all_GM_countries_url.keys():
-#     raw_data = urllib.request.urlopen(url)
-#     data_bytes = raw_data.read()
-#     data_str = data_bytes.decode("utf-8")
-#     data_dict = json.loads(data_str)
-#     country_name = data_dict['name']
-#     counter_all_GM_countries_name[country_name] = counter_all_GM_countries_url[url]
-# print(counter_all_GM_countries_name)
-
-
-# print(data_dict["chess_rapid"]["last"]["rating"])  
 
 
 #Sort this dict by the amount of times that each country appears (the value of each key)
@@ -59,14 +15,14 @@ df = pd.DataFrame(list(diction.items()), columns=["country", "value"])
 invalids = ["Olympic", "International", "European Union", "Catalonia", "England", "Scotland"]
 df = df[~df["country"].isin(invalids)]
 
-# Crear choropleth base
 fig = px.choropleth(
     df,
     locations="country",
     locationmode="country names",
     color="value",
     hover_name="country",
-    color_continuous_scale="Viridis"
+    color_continuous_scale="Blues",
+    range_color=(0, df["value"].quantile(0.95))  # ignora el top 5%
 )
 
 # Añadir los números como texto encima de cada país
@@ -80,7 +36,7 @@ fig.add_trace(go.Scattergeo(
 ))
 
 fig.update_layout(
-    title="Densidad de GM por país",
+    title="Density of GM per country",
     geo=dict(showframe=False, showcoastlines=True)
 )
 
